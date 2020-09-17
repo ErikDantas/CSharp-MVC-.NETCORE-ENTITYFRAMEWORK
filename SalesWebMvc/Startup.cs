@@ -35,10 +35,12 @@ namespace SalesWebMvc
                         builder.MigrationsAssembly("SalesWebMvc")));
             services.AddScoped<SellerServices>();
             services.AddScoped<DepartmentServices>();
+            services.AddScoped<SeedingService>();
+            services.AddScoped<SalesRecordServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SeedingService seeding)
         {
             var enUS = new CultureInfo("en-US");
             var localizationOptions = new RequestLocalizationOptions
@@ -51,6 +53,7 @@ namespace SalesWebMvc
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                seeding.Seed();
             }
             else
             {

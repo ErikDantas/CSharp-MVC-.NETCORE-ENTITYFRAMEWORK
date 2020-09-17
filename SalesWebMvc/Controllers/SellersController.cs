@@ -35,14 +35,17 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Seller seller)
         {
+
             await _sellerservice.InsertAsync(seller);
             return (RedirectToAction(nameof(Index)));
+
+
         }
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Error),new { message = "ID NULL" });
+                return RedirectToAction(nameof(Error), new { message = "ID NULL" });
             }
             var seller = await _sellerservice.FindByIdAsync(id.Value);
             if (seller == null)
@@ -104,13 +107,13 @@ namespace SalesWebMvc.Controllers
             }
             catch (NotFoundException e)
             {
-                return RedirectToAction(nameof(Error), new { message = e.Message});
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
             catch (DbConcurrencyException e)
             {
                 return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            
+
         }
         public IActionResult Error(string message)
         {

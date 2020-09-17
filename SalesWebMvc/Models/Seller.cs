@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection.PortableExecutable;
 
 namespace SalesWebMvc.Models
@@ -9,17 +12,20 @@ namespace SalesWebMvc.Models
        
         public int Id { get; set; }
 
+
         public String Name { get; set; }
 
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
+
         [Display(Name = "Base Salary")]
         [DisplayFormat(DataFormatString = "{0:F2}")]
         public Double BaseSalary { get; set; }
         public Department Department { get; set; }
         public int DepartmentId { get; set; }
+        public ICollection<SalesRecord> SalesRecords { get; set; } = new List<SalesRecord>();
 
 
         public Seller()
@@ -46,6 +52,20 @@ namespace SalesWebMvc.Models
         public override int GetHashCode()
         {
             return HashCode.Combine(Id, Name);
+        }
+        public void AddSales(SalesRecord sr)
+        {
+            SalesRecords.Add(sr);
+        }
+
+        public void RemoveSales(SalesRecord sr)
+        {
+            SalesRecords.Remove(sr);
+        }
+
+        public double TotalSales(DateTime initial, DateTime final)
+        {
+            return SalesRecords.Where(sr => sr.Date >= initial && sr.Date <= final).Sum(sr => sr.Amount);
         }
     }
 }
